@@ -18,5 +18,131 @@
     <div id="feedback"></div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="script.js"></script>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gridder - Daily Griddle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .feedback {
+            margin-top: 10px;
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+        .try-again {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Gridder - Daily Griddle</h1>
+
+<div class="container">
+    <h2>Guess Today's City Coordinates</h2>
+    <p>You have 5 tries to guess the city's coordinates.</p>
+
+    <div class="input-group">
+        <label for="latitude">Latitude (0-90° N or S):</label>
+        <input type="number" id="latitude" step="0.1" placeholder="Enter latitude">
+    </div>
+
+    <div class="input-group">
+        <label for="longitude">Longitude (0-180° E or W):</label>
+        <input type="number" id="longitude" step="0.1" placeholder="Enter longitude">
+    </div>
+
+    <button onclick="makeGuess()">Submit Guess</button>
+
+    <div id="feedback" class="feedback"></div>
+    <div id="remaining-tries"></div>
+</div>
+
+<script>
+    // List of cities with their coordinates
+    const cities = [
+        { name: 'Paris', latitude: 48.9, longitude: 2.4 },
+        { name: 'New York', latitude: 40.7, longitude: -74.0 },
+        { name: 'Tokyo', latitude: 35.7, longitude: 139.7 },
+        { name: 'Cairo', latitude: 30.0, longitude: 31.2 },
+        { name: 'Sydney', latitude: -33.9, longitude: 151.2 }
+    ];
+
+    // Pick a random city for the daily challenge
+    const randomCity = cities[Math.floor(Math.random() * cities.length)];
+    const maxTries = 5;
+    let tries = 0;
+
+    function makeGuess() {
+        const latInput = parseFloat(document.getElementById('latitude').value);
+        const longInput = parseFloat(document.getElementById('longitude').value);
+        const tolerance = 1; // margin of error
+        let feedback = document.getElementById('feedback');
+        let remainingTries = document.getElementById('remaining-tries');
+
+        if (isNaN(latInput) || isNaN(longInput)) {
+            feedback.textContent = "Please enter valid numbers for both latitude and longitude.";
+            return;
+        }
+
+        tries++;
+
+        // Check if the guess is correct (within tolerance)
+        const latDiff = Math.abs(latInput - randomCity.latitude);
+        const longDiff = Math.abs(longInput - randomCity.longitude);
+
+        if (latDiff <= tolerance && longDiff <= tolerance) {
+            feedback.textContent = `Congratulations! You've guessed correctly! The city is ${randomCity.name}.`;
+            feedback.className = "success";
+        } else {
+            feedback.textContent = `Incorrect guess. Latitude is off by ${latDiff.toFixed(1)}, Longitude is off by ${longDiff.toFixed(1)}.`;
+            feedback.className = "try-again";
+        }
+
+        // Check if tries have run out
+        if (tries >= maxTries) {
+            feedback.textContent += ` You've used all your tries. The correct answer was ${randomCity.name} (${randomCity.latitude}, ${randomCity.longitude}).`;
+            feedback.className = "feedback";
+        } else {
+            remainingTries.textContent = `Tries remaining: ${maxTries - tries}`;
+        }
+    }
+</script>
+
 </body>
 </html>
+
