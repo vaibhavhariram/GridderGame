@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gridder Game</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+    <h1>Gridder Game</h1>
+    <div id="map"></div>
+    <div id="controls">
+        <input type="number" id="latitude" placeholder="Latitude" step="0.1">
+        <input type="number" id="longitude" placeholder="Longitude" step="0.1">
+        <button onclick="guess()">Guess</button>
+    </div>
+    <div id="feedback"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
